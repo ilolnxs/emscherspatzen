@@ -15,31 +15,42 @@ const { auftritt, lieder } = Astro.props;
 ---
 
 <BaseLayout title={auftritt.titel}>
-	<p class="meta">
-		{formatDatumZeit(auftritt)}
-		{auftritt.ort && <span>, {auftritt.ort}</span>}
-	</p>
-	<h1>{auftritt.titel}</h1>
+	<div class="inhalt">
+		<p class="meta">
+			{formatDatumZeit(auftritt)}
+			{auftritt.ort && <span> · {auftritt.ort}</span>}
+		</p>
+		<h1>{auftritt.titel}</h1>
 
-	{
-		lieder.map((lied) => (
-			<section class="lied">
-				<h2>{lied.titel}</h2>
-				<p class="liedtext">{lied.text}</p>
-			</section>
-		))
-	}
+		{
+			lieder.map((lied) => (
+				<section class="lied">
+					<h2>{lied.titel}</h2>
+					<p class="liedtext">{lied.text}</p>
+				</section>
+			))
+		}
 
-	<p class="qr">
-		<img src={`/qr/${auftritt.slug}.png`} alt="QR-Code zu dieser Setlist" width="200" height="200" />
-		<br />
-		<a href={`/qr/${auftritt.slug}.png`} download={`${auftritt.slug}-qr.png`}>QR-Code herunterladen</a>
-	</p>
+		<div class="qr">
+			<img src={`/qr/${auftritt.slug}.png`} alt="QR-Code zu dieser Setlist" width="180" height="180" />
+			<a href={`/qr/${auftritt.slug}.png`} download={`${auftritt.slug}-qr.png`}
+				>QR-Code herunterladen</a
+			>
+		</div>
+	</div>
 </BaseLayout>
 
 <style>
+	.inhalt {
+		max-width: 640px;
+		margin: 0 auto;
+		padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 5vw, 3rem);
+	}
+
 	.meta {
-		color: #666;
+		font-family: var(--font-display);
+		font-weight: 600;
+		color: var(--blau);
 		margin-block-end: 0;
 	}
 
@@ -48,20 +59,38 @@ const { auftritt, lieder } = Astro.props;
 	}
 
 	.lied {
-		margin-block: 2rem;
+		margin-block-start: 2.5rem;
+		padding-block-start: 2rem;
+		border-top: 1px solid var(--blau-hell);
+	}
+
+	.lied h2 {
+		color: var(--blau-dunkel);
 	}
 
 	.liedtext {
 		white-space: pre-wrap;
+		font-size: 1.1rem;
+		line-height: 1.8;
+		max-width: none;
 	}
 
 	.qr {
-		margin-block-start: 3rem;
+		margin-block-start: 3.5rem;
+		padding-block-start: 2.5rem;
+		border-top: 1px solid var(--blau-hell);
 		text-align: center;
 	}
 
 	.qr img {
-		max-width: 200px;
+		display: block;
+		margin: 0 auto 1rem;
+		max-width: 180px;
 		height: auto;
+	}
+
+	.qr a {
+		font-family: var(--font-display);
+		font-weight: 600;
 	}
 </style>

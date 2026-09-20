@@ -3,64 +3,70 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Mitmachen">
-	<h1>Mitsingen bei den Emscherspatzen</h1>
+	<div class="inhalt">
+		<h1>Mitsingen bei den Emscherspatzen</h1>
 
-	<p>
-		Du überlegst, bei uns mitzusingen? Hier erfährst du, worauf du dich einlässt – unser Leitbild in
-		kurz.
-	</p>
-
-	<section>
-		<h2>Wer wir sind</h2>
-		<p>
-			Wir sind die Emscherspatzen, ein Männerchor aus Oberhausen-Sterkrade. Bei uns zählt nicht, ob
-			jeder Ton sitzt. Wichtig ist der gemeinsame Auftritt: Wenn wir zusammen singen, fallen einzelne
-			falsche Töne nicht auf – das Ganze klingt trotzdem gut. Wir sind nicht der Chor, der nicht
-			singen kann, sondern der Chor, bei dem man nicht jeden Ton treffen muss, um Spaß zu haben. Und
-			wir werden immer besser.
+		<p class="intro">
+			Du überlegst, bei uns mitzusingen? Hier erfährst du, worauf du dich einlässt – unser Leitbild
+			in kurz.
 		</p>
-	</section>
 
-	<section>
-		<h2>Auftritte mit Haltung</h2>
-		<p>
-			Wenn wir auf der Bühne stehen, soll man uns die Freude ansehen: lächeln, bewegen, mit dem
-			Publikum klatschen. Wir treten nicht für Geld auf – unsere Gagen gehen als Spende an
-			gemeinnützige Zwecke.
-		</p>
-	</section>
+		<section>
+			<h2>Wer wir sind</h2>
+			<p>
+				Wir sind die Emscherspatzen, ein Männerchor aus Oberhausen-Sterkrade. Bei uns zählt nicht, ob
+				jeder Ton sitzt. Wichtig ist der gemeinsame Auftritt: Wenn wir zusammen singen, fallen
+				einzelne falsche Töne nicht auf – das Ganze klingt trotzdem gut. Wir sind nicht der Chor, der
+				nicht singen kann, sondern der Chor, bei dem man nicht jeden Ton treffen muss, um Spaß zu
+				haben. Und wir werden immer besser.
+			</p>
+		</section>
 
-	<section>
-		<h2>Einer für alle</h2>
-		<p>
-			Bei uns hilft jeder mit, ohne dass man ihn dazu auffordern muss – beim Aufbau, beim Transport,
-			bei allem, was ein Auftritt braucht. Der Zusammenhalt geht über die Proben hinaus.
-		</p>
-	</section>
+		<section>
+			<h2>Auftritte mit Haltung</h2>
+			<p>
+				Wenn wir auf der Bühne stehen, soll man uns die Freude ansehen: lächeln, bewegen, mit dem
+				Publikum klatschen. Wir treten nicht für Geld auf – unsere Gagen gehen als Spende an
+				gemeinnützige Zwecke.
+			</p>
+		</section>
 
-	<section>
-		<h2>Regelmäßigkeit zählt</h2>
-		<p>
-			Wer bei uns mitsingt, kommt regelmäßig zu den Proben. Verlässlichkeit ist uns wichtig – sowohl
-			untereinander als auch gegenüber den Veranstaltern, bei denen wir auftreten.
-		</p>
-	</section>
+		<section>
+			<h2>Einer für alle</h2>
+			<p>
+				Bei uns hilft jeder mit, ohne dass man ihn dazu auffordern muss – beim Aufbau, beim
+				Transport, bei allem, was ein Auftritt braucht. Der Zusammenhalt geht über die Proben
+				hinaus.
+			</p>
+		</section>
 
-	<p class="tagline">
-		„Andere Städte haben auch einen Chor, aber so wie wir singt dir keiner was vor.“
-	</p>
+		<section>
+			<h2>Regelmäßigkeit zählt</h2>
+			<p>
+				Wer bei uns mitsingt, kommt regelmäßig zu den Proben. Verlässlichkeit ist uns wichtig –
+				sowohl untereinander als auch gegenüber den Veranstaltern, bei denen wir auftreten.
+			</p>
+		</section>
+	</div>
 </BaseLayout>
 
 <style>
-	section {
-		margin-block-end: 2rem;
+	.inhalt {
+		max-width: 680px;
+		margin: 0 auto;
+		padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 5vw, 3rem);
 	}
 
-	.tagline {
-		margin-block-start: 3rem;
-		font-style: italic;
-		font-size: 1.1rem;
-		border-left: 3px solid #ddd;
-		padding-inline-start: 1rem;
+	.intro {
+		font-family: var(--font-display);
+		font-size: 1.2rem;
+		font-weight: 500;
+		color: var(--blau-dunkel);
+	}
+
+	section {
+		margin-block-start: 2.5rem;
+		padding-inline-start: 1.25rem;
+		border-inline-start: 3px solid var(--blau-hell);
 	}
 </style>
