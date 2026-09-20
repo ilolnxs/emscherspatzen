@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Work+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root {
+	--blau-dunkel: #14315d;
+	--blau: #2c5fa8;
+	--blau-hell: #dce8f7;
+	--weiss: #ffffff;
+	--papier: #f7f7f4;
+	--tinte: #171b21;
+
+	--font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+	--font-body: 'Work Sans', system-ui, sans-serif;
+
+	color-scheme: light;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	background: var(--papier);
+	color: var(--tinte);
+	font-family: var(--font-body);
+	font-size: 1.0625rem;
+	line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+	font-family: var(--font-display);
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: -0.01em;
+	margin: 0 0 0.5em;
+}
+
+h1 {
+	font-size: clamp(2.25rem, 4vw + 1rem, 3.5rem);
+}
+
+h2 {
+	font-size: clamp(1.375rem, 1.5vw + 1rem, 1.75rem);
+}
+
+p {
+	margin: 0 0 1em;
+	max-width: 68ch;
+}
+
+a {
+	color: var(--blau-dunkel);
+}
+
+:focus-visible {
+	outline: 3px solid var(--blau);
+	outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}

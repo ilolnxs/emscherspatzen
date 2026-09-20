@@ -21,56 +21,120 @@ if (!csvUrl) {
 }
 
 const { bevorstehende, vergangene } = splitByZeitpunkt(auftritte);
+
+function tag(iso: string): string {
+	return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', timeZone: 'UTC' });
+}
+
+function monat(iso: string): string {
+	return new Date(iso)
+		.toLocaleDateString('de-DE', { month: 'short', timeZone: 'UTC' })
+		.replace('.', '')
+		.toUpperCase();
+}
 ---
 
 <BaseLayout title="Start">
-	<h1>Emscherspatzen</h1>
-
-	<section>
-		<h2>Bevorstehende Auftritte</h2>
-		{
-			bevorstehende.length === 0 ? (
-				<p>Aktuell sind keine Auftritte geplant.</p>
-			) : (
-				<ul class="auftritte-liste">
-					{bevorstehende.map((a) => (
-						<li>
-							<strong>{formatDatumZeit(a)}</strong> – {a.titel}
-							{a.ort && <span>, {a.ort}</span>}
-							{a.beschreibung && <p>{a.beschreibung}</p>}
-						</li>
-					))}
-				</ul>
-			)
-		}
+	<section class="hero">
+		<img src="/logo/emscherspatzen-weiss.svg" alt="Emscherspatzen" class="hero-logo" />
+		<p class="tagline">
+			„Andere Städte haben auch einen Chor, aber so wie wir singt dir keiner was vor.“
+		</p>
 	</section>
 
-	<section>
-		<h2>Vergangene Auftritte</h2>
-		{
-			vergangene.length === 0 ? (
-				<p>Noch keine vergangenen Auftritte.</p>
-			) : (
-				<ul class="auftritte-liste">
-					{vergangene.map((a) => (
-						<li>
-							<strong>{formatDatumZeit(a)}</strong> – {a.titel}
-							{a.ort && <span>, {a.ort}</span>}
-						</li>
-					))}
-				</ul>
-			)
-		}
-	</section>
+	<div class="inhalt">
+		<section>
+			<h2>Bevorstehende Auftritte</h2>
+			{
+				bevorstehende.length === 0 ? (
+					<p>Aktuell sind keine Auftritte geplant.</p>
+				) : (
+					<ul class="auftritte-liste">
+						{bevorstehende.map((a) => (
+							<li>
+								<div class="datumsschild">
+									<span class="tag">{tag(a.datum)}</span>
+									<span class="monat">{monat(a.datum)}</span>
+								</div>
+								<div class="auftritt-info">
+									<h3>{a.titel}</h3>
+									<p class="meta">
+										{formatDatumZeit(a)}
+										{a.ort && <span> · {a.ort}</span>}
+									</p>
+									{a.beschreibung && <p class="beschreibung">{a.beschreibung}</p>}
+								</div>
+							</li>
+						))}
+					</ul>
+				)
+			}
+		</section>
+
+		<section>
+			<h2>Vergangene Auftritte</h2>
+			{
+				vergangene.length === 0 ? (
+					<p>Noch keine vergangenen Auftritte.</p>
+				) : (
+					<ul class="auftritte-liste vergangen">
+						{vergangene.map((a) => (
+							<li>
+								<div class="datumsschild">
+									<span class="tag">{tag(a.datum)}</span>
+									<span class="monat">{monat(a.datum)}</span>
+								</div>
+								<div class="auftritt-info">
+									<h3>{a.titel}</h3>
+									<p class="meta">
+										{formatDatumZeit(a)}
+										{a.ort && <span> · {a.ort}</span>}
+									</p>
+								</div>
+							</li>
+						))}
+					</ul>
+				)
+			}
+		</section>
+	</div>
 </BaseLayout>
 
 <style>
+	.hero {
+		background: var(--blau-dunkel);
+		color: var(--weiss);
+		padding: clamp(2.5rem, 8vw, 5rem) clamp(1rem, 5vw, 3rem);
+		text-align: center;
+	}
+
+	.hero-logo {
+		width: min(280px, 70vw);
+		height: auto;
+	}
+
+	.tagline {
+		max-width: 34ch;
+		margin: 1.5rem auto 0;
+		font-family: var(--font-display);
+		font-size: clamp(1.1rem, 2vw + 0.5rem, 1.4rem);
+		font-weight: 500;
+		line-height: 1.4;
+	}
+
+	.inhalt {
+		max-width: 720px;
+		margin: 0 auto;
+		padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 5vw, 3rem);
+	}
+
 	section {
-		margin-block-end: 2.5rem;
+		margin-block-end: 3rem;
 	}
 
 	.auftritte-liste {
 		list-style: none;
+		margin: 0;
 		padding: 0;
 		display: flex;
 		flex-direction: column;
@@ -78,7 +142,66 @@ const { bevorstehende, vergangene } = splitByZeitpunkt(auftritte);
 	}
 
 	.auftritte-liste li {
-		border-bottom: 1px solid #eee;
-		padding-block-end: 1rem;
+		display: flex;
+		gap: 1.25rem;
+		border: 1px solid var(--blau-hell);
+		border-inline-start: 4px solid var(--blau);
+		padding: 1rem 1.25rem;
+		background: var(--weiss);
+	}
+
+	.auftritte-liste.vergangen li {
+		border-inline-start-color: #b7bfc9;
+		background: transparent;
+	}
+
+	.datumsschild {
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 3.5rem;
+		font-family: var(--font-display);
+		line-height: 1;
+	}
+
+	.datumsschild .tag {
+		font-size: 1.6rem;
+		font-weight: 700;
+		color: var(--blau-dunkel);
+	}
+
+	.datumsschild .monat {
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--blau);
+		margin-block-start: 0.25rem;
+	}
+
+	.vergangen .datumsschild .tag,
+	.vergangen .datumsschild .monat {
+		color: #6b7280;
+	}
+
+	.auftritt-info {
+		min-width: 0;
+	}
+
+	.auftritt-info h3 {
+		font-family: var(--font-display);
+		font-size: 1.15rem;
+		font-weight: 700;
+		margin: 0;
+	}
+
+	.meta {
+		margin: 0.2rem 0 0;
+		font-size: 0.9375rem;
+		color: #4b5563;
+	}
+
+	.beschreibung {
+		margin: 0.5rem 0 0;
 	}
 </style>
