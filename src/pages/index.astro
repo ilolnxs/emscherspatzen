@@ -8,18 +8,27 @@ let auftritte: Auftritt[] = [];
 if (!csvUrl) {
 	console.warn('AUFTRITTE_SHEET_CSV_URL ist nicht gesetzt – es werden keine Auftritte angezeigt.');
 } else {
-	const response = await fetch(csvUrl);
-	if (!response.ok) {
-		console.warn(`Auftritte-Sheet konnte nicht geladen werden (HTTP ${response.status}).`);
-	} else {
-		auftritte = parseAuftritte(await response.text());
+	try {
+		const response = await fetch(csvUrl);
+		if (!response.ok) {
+			console.warn(`Auftritte-Sheet konnte nicht geladen werden (HTTP ${response.status}).`);
+		} else {
+			auftritte = parseAuftritte(await response.text());
+		}
+	} catch (error) {
+		console.warn(`Auftritte-Sheet konnte nicht geladen werden: ${error}`);
 	}
 }
 
 const { bevorstehende, vergangene } = splitByZeitpunkt(auftritte);
 
 function formatDatum(iso: string): string {
-	return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+	return new Date(iso).toLocaleDateString('de-DE', {
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric',
+		timeZone: 'UTC',
+	});
 }
 ---
 
