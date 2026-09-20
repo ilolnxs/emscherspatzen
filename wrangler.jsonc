@@ -1,0 +1,12 @@
+{
+	// Reine Static-Assets-Auslieferung, kein Worker-Skript/SSR-Adapter.
+	// Ohne diese Datei versucht `wrangler deploy` beim ersten Lauf automatisch
+	// den @astrojs/cloudflare-SSR-Adapter zu installieren (Images/KV/Sessions-
+	// Bindings) und baut dabei selbst neu – dieser zweite Build hatte keinen
+	// Zugriff auf die Cloudflare-Build-Variablen (siehe docs/adr/0001).
+	"name": "emscherspatzen",
+	"compatibility_date": "2026-09-20",
+	"assets": {
+		"directory": "./dist"
+	}
+}
