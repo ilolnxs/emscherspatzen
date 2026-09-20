@@ -12,6 +12,10 @@ Single-context: `CONTEXT.md` + `docs/adr/` at the repo root (created lazily as d
 
 Static Astro site, deployed to Cloudflare Pages (build command `npm run build`, output directory `dist`, no adapter needed).
 
+## Deployment
+
+Live: https://emscherspatzen.marvin-grigg.workers.dev/ (Cloudflare, Auto-Deploy bei Push auf main)
+
 When starting the dev server, use background mode:
 
 ```
