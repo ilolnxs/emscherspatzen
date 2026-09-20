@@ -20,7 +20,10 @@ const { title } = Astro.props;
 	<body>
 		<header class="site-header">
 			<a href="/" class="brand">
-				<img src="/logo/emscherspatzen.svg" alt="Emscherspatzen" class="logo" />
+				<picture>
+					<source media="(prefers-reduced-motion: reduce)" srcset="/logo/emscherspatzen.svg" />
+					<img src="/logo/emscherspatzen-animiert.gif" alt="Emscherspatzen" class="logo" />
+				</picture>
 			</a>
 			<nav class="site-nav">
 				<a href="/">Start</a>
@@ -31,7 +34,10 @@ const { title } = Astro.props;
 			<slot />
 		</main>
 		<footer class="site-footer">
-			<img src="/logo/emscherspatzen-weiss.svg" alt="" class="footer-logo" />
+			<picture>
+				<source media="(prefers-reduced-motion: reduce)" srcset="/logo/emscherspatzen-weiss.svg" />
+				<img src="/logo/emscherspatzen-animiert-weiss.gif" alt="" class="footer-logo" />
+			</picture>
 			<p>&copy; {new Date().getFullYear()} Emscherspatzen</p>
 		</footer>
 	</body>
