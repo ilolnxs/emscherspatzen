@@ -36,7 +36,10 @@ function monat(iso: string): string {
 
 <BaseLayout title="Start">
 	<section class="hero">
-		<img src="/logo/emscherspatzen-weiss.svg" alt="Emscherspatzen" class="hero-logo" />
+		<picture>
+			<source media="(prefers-reduced-motion: reduce)" srcset="/logo/emscherspatzen-weiss.svg" />
+			<img src="/logo/emscherspatzen-animiert-weiss.gif" alt="Emscherspatzen" class="hero-logo" />
+		</picture>
 		<p class="tagline">
 			„Andere Städte haben auch einen Chor, aber so wie wir singt dir keiner was vor.“
 		</p>
