@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDatumZeit } from '../../lib/auftritte';
+import { getSetlistSeiten } from '../../lib/setlistSeiten';
+
+export async function getStaticPaths() {
+	const seiten = await getSetlistSeiten();
+	return seiten.map((seite) => ({
+		params: { slug: seite.auftritt.slug },
+		props: seite,
+	}));
+}
+
+const { auftritt, lieder } = Astro.props;
+---
+
+<BaseLayout title={auftritt.titel}>
+	<p class="meta">
+		{formatDatumZeit(auftritt)}
+		{auftritt.ort && <span>, {auftritt.ort}</span>}
+	</p>
+	<h1>{auftritt.titel}</h1>
+
+	{
+		lieder.map((lied) => (
+			<section class="lied">
+				<h2>{lied.titel}</h2>
+				<p class="liedtext">{lied.text}</p>
+			</section>
+		))
+	}
+
+	<p class="qr">
+		<img src={`/qr/${auftritt.slug}.png`} alt="QR-Code zu dieser Setlist" width="200" height="200" />
+		<br />
+		<a href={`/qr/${auftritt.slug}.png`} download={`${auftritt.slug}-qr.png`}>QR-Code herunterladen</a>
+	</p>
+</BaseLayout>
+
+<style>
+	.meta {
+		color: #666;
+		margin-block-end: 0;
+	}
+
+	h1 {
+		margin-block-start: 0.25rem;
+	}
+
+	.lied {
+		margin-block: 2rem;
+	}
+
+	.liedtext {
+		white-space: pre-wrap;
+	}
+
+	.qr {
+		margin-block-start: 3rem;
+		text-align: center;
+	}
+
+	.qr img {
+		max-width: 200px;
+		height: auto;
+	}
+</style>

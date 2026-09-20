@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { parseAuftritte, splitByZeitpunkt, type Auftritt } from '../lib/auftritte';
+import { parseAuftritte, splitByZeitpunkt, formatDatumZeit, type Auftritt } from '../lib/auftritte';
 
 const csvUrl = process.env.AUFTRITTE_SHEET_CSV_URL;
 
@@ -21,16 +21,6 @@ if (!csvUrl) {
 }
 
 const { bevorstehende, vergangene } = splitByZeitpunkt(auftritte);
-
-function formatDatumZeit(a: Auftritt): string {
-	const datum = new Date(a.datum).toLocaleDateString('de-DE', {
-		day: '2-digit',
-		month: '2-digit',
-		year: 'numeric',
-		timeZone: 'UTC',
-	});
-	return a.uhrzeit ? `${datum}, ${a.uhrzeit} Uhr` : datum;
-}
 ---
 
 <BaseLayout title="Start">

@@ -90,3 +90,13 @@ export function splitByZeitpunkt(
 
 	return { bevorstehende, vergangene };
 }
+
+export function formatDatumZeit(auftritt: Auftritt): string {
+	const datum = new Date(auftritt.datum).toLocaleDateString('de-DE', {
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric',
+		timeZone: 'UTC',
+	});
+	return auftritt.uhrzeit ? `${datum}, ${auftritt.uhrzeit} Uhr` : datum;
+}
