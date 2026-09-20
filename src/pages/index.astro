@@ -22,13 +22,14 @@ if (!csvUrl) {
 
 const { bevorstehende, vergangene } = splitByZeitpunkt(auftritte);
 
-function formatDatum(iso: string): string {
-	return new Date(iso).toLocaleDateString('de-DE', {
+function formatDatumZeit(a: Auftritt): string {
+	const datum = new Date(a.datum).toLocaleDateString('de-DE', {
 		day: '2-digit',
 		month: '2-digit',
 		year: 'numeric',
 		timeZone: 'UTC',
 	});
+	return a.uhrzeit ? `${datum}, ${a.uhrzeit} Uhr` : datum;
 }
 ---
 
@@ -44,7 +45,7 @@ function formatDatum(iso: string): string {
 				<ul class="auftritte-liste">
 					{bevorstehende.map((a) => (
 						<li>
-							<strong>{formatDatum(a.datum)}</strong> – {a.titel}
+							<strong>{formatDatumZeit(a)}</strong> – {a.titel}
 							{a.ort && <span>, {a.ort}</span>}
 							{a.beschreibung && <p>{a.beschreibung}</p>}
 						</li>
@@ -63,7 +64,7 @@ function formatDatum(iso: string): string {
 				<ul class="auftritte-liste">
 					{vergangene.map((a) => (
 						<li>
-							<strong>{formatDatum(a.datum)}</strong> – {a.titel}
+							<strong>{formatDatumZeit(a)}</strong> – {a.titel}
 							{a.ort && <span>, {a.ort}</span>}
 						</li>
 					))}

@@ -1,19 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { parseAuftritte, splitByZeitpunkt } from './auftritte';
 
-const csv = `Datum,Titel,Ort,Beschreibung
-2026-12-14,Weihnachtssingen,Niederrheinstadion,"Der Klassiker, mit Punsch und Publikum"
-2026-01-05,Feierabendbier,Bottroper Brauerei,Kleiner Auftritt zum Jahresstart
+const csv = `Datum,Uhrzeit,Titel,Ort,Beschreibung
+2026-12-14,18:00,Weihnachtssingen,Niederrheinstadion,"Der Klassiker, mit Punsch und Publikum"
+2026-01-05,,Feierabendbier,Bottroper Brauerei,Kleiner Auftritt zum Jahresstart
 `;
 
 describe('parseAuftritte', () => {
-	it('parses rows into structured Auftritt objects', () => {
+	it('parses rows into structured Auftritt objects, Uhrzeit optional', () => {
 		const result = parseAuftritte(csv);
 
 		expect(result).toEqual([
 			{
 				slug: '2026-12-14-weihnachtssingen',
 				datum: '2026-12-14',
+				uhrzeit: '18:00',
 				titel: 'Weihnachtssingen',
 				ort: 'Niederrheinstadion',
 				beschreibung: 'Der Klassiker, mit Punsch und Publikum',
@@ -21,6 +22,7 @@ describe('parseAuftritte', () => {
 			{
 				slug: '2026-01-05-feierabendbier',
 				datum: '2026-01-05',
+				uhrzeit: '',
 				titel: 'Feierabendbier',
 				ort: 'Bottroper Brauerei',
 				beschreibung: 'Kleiner Auftritt zum Jahresstart',
@@ -28,10 +30,21 @@ describe('parseAuftritte', () => {
 		]);
 	});
 
+	it('clears an invalid Uhrzeit instead of skipping the row', () => {
+		const withBadUhrzeit = `Datum,Uhrzeit,Titel,Ort,Beschreibung
+2026-03-01,18 Uhr,Gültiger Auftritt,Irgendwo,
+`;
+
+		const result = parseAuftritte(withBadUhrzeit);
+
+		expect(result).toHaveLength(1);
+		expect(result[0].uhrzeit).toBe('');
+	});
+
 	it('skips rows with a missing or invalid Datum', () => {
-		const withBadRow = `Datum,Titel,Ort,Beschreibung
-not-a-date,Kaputter Auftritt,Nirgendwo,
-2026-03-01,Gültiger Auftritt,Irgendwo,
+		const withBadRow = `Datum,Uhrzeit,Titel,Ort,Beschreibung
+not-a-date,18:00,Kaputter Auftritt,Nirgendwo,
+2026-03-01,18:00,Gültiger Auftritt,Irgendwo,
 `;
 
 		const result = parseAuftritte(withBadRow);
@@ -41,16 +54,16 @@ not-a-date,Kaputter Auftritt,Nirgendwo,
 	});
 
 	it('skips rows with a missing Titel', () => {
-		const withBadRow = `Datum,Titel,Ort,Beschreibung
-2026-03-01,,Irgendwo,
+		const withBadRow = `Datum,Uhrzeit,Titel,Ort,Beschreibung
+2026-03-01,18:00,,Irgendwo,
 `;
 
 		expect(parseAuftritte(withBadRow)).toHaveLength(0);
 	});
 
 	it('builds URL-safe slugs from Umlauts and special characters', () => {
-		const withUmlaut = `Datum,Titel,Ort,Beschreibung
-2026-05-01,Grönemeyer-Tribut & Chöre!,Örtchen,
+		const withUmlaut = `Datum,Uhrzeit,Titel,Ort,Beschreibung
+2026-05-01,,Grönemeyer-Tribut & Chöre!,Örtchen,
 `;
 
 		expect(parseAuftritte(withUmlaut)[0].slug).toBe('2026-05-01-groenemeyer-tribut-choere');
@@ -61,11 +74,11 @@ describe('splitByZeitpunkt', () => {
 	it('splits into bevorstehende (ascending) and vergangene (descending)', () => {
 		const heute = new Date('2026-06-01');
 		const auftritte = parseAuftritte(
-			`Datum,Titel,Ort,Beschreibung
-2026-12-14,Spätester,Ort,
-2026-01-05,Vergangen 1,Ort,
-2026-07-01,Nächster,Ort,
-2025-11-01,Vergangen 2,Ort,
+			`Datum,Uhrzeit,Titel,Ort,Beschreibung
+2026-12-14,,Spätester,Ort,
+2026-01-05,,Vergangen 1,Ort,
+2026-07-01,,Nächster,Ort,
+2025-11-01,,Vergangen 2,Ort,
 `
 		);
 
