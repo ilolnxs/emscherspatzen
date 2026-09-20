@@ -3,12 +3,14 @@ import Papa from 'papaparse';
 export interface Auftritt {
 	slug: string;
 	datum: string;
+	uhrzeit: string;
 	titel: string;
 	ort: string;
 	beschreibung: string;
 }
 
 const DATUM_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const UHRZEIT_PATTERN = /^\d{2}:\d{2}$/;
 
 function slugify(text: string): string {
 	return text
@@ -24,10 +26,12 @@ function slugify(text: string): string {
 }
 
 /**
- * Wandelt rohe Sheet-Zeilen (CSV mit Spalten Datum, Titel, Ort, Beschreibung)
- * in strukturierte Auftritt-Objekte um. Zeilen mit fehlendem/ungültigem Datum
- * oder fehlendem Titel werden übersprungen statt den Build abzubrechen, da
- * das Sheet von nicht-technischen Personen gepflegt wird.
+ * Wandelt rohe Sheet-Zeilen (CSV mit Spalten Datum, Uhrzeit, Titel, Ort,
+ * Beschreibung) in strukturierte Auftritt-Objekte um. Zeilen mit
+ * fehlendem/ungültigem Datum oder fehlendem Titel werden übersprungen statt
+ * den Build abzubrechen, da das Sheet von nicht-technischen Personen
+ * gepflegt wird. Uhrzeit ist optional; eine ungültige Uhrzeit wird nur
+ * geleert, nicht die ganze Zeile verworfen.
  */
 export function parseAuftritte(csv: string): Auftritt[] {
 	const { data } = Papa.parse<Record<string, string>>(csv, {
@@ -42,6 +46,7 @@ export function parseAuftritte(csv: string): Auftritt[] {
 		const titel = row.Titel?.trim() ?? '';
 		const ort = row.Ort?.trim() ?? '';
 		const beschreibung = row.Beschreibung?.trim() ?? '';
+		let uhrzeit = row.Uhrzeit?.trim() ?? '';
 
 		if (!DATUM_PATTERN.test(datum)) {
 			console.warn(`Auftritt übersprungen: ungültiges Datum "${datum}" (Titel: "${titel}")`);
@@ -51,10 +56,15 @@ export function parseAuftritte(csv: string): Auftritt[] {
 			console.warn(`Auftritt übersprungen: kein Titel (Datum: "${datum}")`);
 			continue;
 		}
+		if (uhrzeit && !UHRZEIT_PATTERN.test(uhrzeit)) {
+			console.warn(`Uhrzeit ignoriert: ungültiges Format "${uhrzeit}" (Titel: "${titel}"), erwartet HH:MM`);
+			uhrzeit = '';
+		}
 
 		auftritte.push({
 			slug: `${datum}-${slugify(titel)}`,
 			datum,
+			uhrzeit,
 			titel,
 			ort,
 			beschreibung,
