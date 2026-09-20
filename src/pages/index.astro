@@ -1,8 +1,84 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { parseAuftritte, splitByZeitpunkt, type Auftritt } from '../lib/auftritte';
+
+const csvUrl = process.env.AUFTRITTE_SHEET_CSV_URL;
+
+let auftritte: Auftritt[] = [];
+if (!csvUrl) {
+	console.warn('AUFTRITTE_SHEET_CSV_URL ist nicht gesetzt – es werden keine Auftritte angezeigt.');
+} else {
+	const response = await fetch(csvUrl);
+	if (!response.ok) {
+		console.warn(`Auftritte-Sheet konnte nicht geladen werden (HTTP ${response.status}).`);
+	} else {
+		auftritte = parseAuftritte(await response.text());
+	}
+}
+
+const { bevorstehende, vergangene } = splitByZeitpunkt(auftritte);
+
+function formatDatum(iso: string): string {
+	return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
 ---
 
 <BaseLayout title="Start">
 	<h1>Emscherspatzen</h1>
-	<p>Die Webseite ist im Aufbau. Als Nächstes kommen hier die Auftritte.</p>
+
+	<section>
+		<h2>Bevorstehende Auftritte</h2>
+		{
+			bevorstehende.length === 0 ? (
+				<p>Aktuell sind keine Auftritte geplant.</p>
+			) : (
+				<ul class="auftritte-liste">
+					{bevorstehende.map((a) => (
+						<li>
+							<strong>{formatDatum(a.datum)}</strong> – {a.titel}
+							{a.ort && <span>, {a.ort}</span>}
+							{a.beschreibung && <p>{a.beschreibung}</p>}
+						</li>
+					))}
+				</ul>
+			)
+		}
+	</section>
+
+	<section>
+		<h2>Vergangene Auftritte</h2>
+		{
+			vergangene.length === 0 ? (
+				<p>Noch keine vergangenen Auftritte.</p>
+			) : (
+				<ul class="auftritte-liste">
+					{vergangene.map((a) => (
+						<li>
+							<strong>{formatDatum(a.datum)}</strong> – {a.titel}
+							{a.ort && <span>, {a.ort}</span>}
+						</li>
+					))}
+				</ul>
+			)
+		}
+	</section>
 </BaseLayout>
+
+<style>
+	section {
+		margin-block-end: 2.5rem;
+	}
+
+	.auftritte-liste {
+		list-style: none;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.auftritte-liste li {
+		border-bottom: 1px solid #eee;
+		padding-block-end: 1rem;
+	}
+</style>
