@@ -12,6 +12,12 @@ export interface SetlistSeite {
  * passende Lieder bekommt keine Seite (kein Sinn in einem QR-Code ins
  * Leere). Netzwerk-/Konfigurationsfehler führen zu einer leeren Liste statt
  * den Build abzubrechen.
+ *
+ * ponytail: [slug].astro und [slug].png.ts rufen diese Funktion unabhängig
+ * auf (je ein eigener Fetch pro Route-Typ). Ändert sich das Sheet exakt
+ * zwischen beiden Aufrufen, könnten Setlist-Seite und QR-Code kurzzeitig
+ * auseinanderlaufen. Geringes Risiko, nur zur Build-Zeit relevant. Upgrade
+ * bei Bedarf: Ergebnis für die Dauer eines Builds cachen.
  */
 export async function getSetlistSeiten(): Promise<SetlistSeite[]> {
 	const auftritteUrl = process.env.AUFTRITTE_SHEET_CSV_URL;
