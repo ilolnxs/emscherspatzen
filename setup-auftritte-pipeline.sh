@@ -249,10 +249,13 @@ function onChange() {
 SCRIPT
 printf '%s———————————————————————————————————————————————%s\n\n' "$DIM" "$RESET"
 step "Speichern (Diskettensymbol), Projekt z.B. 'Auftritte Auto-Rebuild' nennen."
-step "Links die Uhr (Trigger) -> 'Trigger hinzufügen':"
-step "  Funktion: onChange · Ereignisquelle: Aus Tabelle · Ereignistyp: Bei Änderung -> Speichern"
+step "Links die Uhr (Trigger) -> 'Trigger hinzufügen' — zweimal, beide auf dieselbe Funktion:"
+step "  1. Funktion: onChange · Ereignisquelle: Aus Tabelle · Ereignistyp: Bei Änderung -> Speichern"
+step "  2. Funktion: onChange · Ereignisquelle: Zeitgesteuert · Typ: Tagestimer · 3 bis 4 Uhr -> Speichern"
+say "Der zweite Trigger baut die Seite jede Nacht neu, damit vergangene Auftritte"
+say "nicht bis zur nächsten Sheet-Änderung unter 'Bevorstehende' stehenbleiben."
 step "Beim ersten Speichern nach Berechtigungen fragen -> eigenes Google-Konto erlauben."
-pause "Trigger eingerichtet? Weiter mit Enter."
+pause "Beide Trigger eingerichtet? Weiter mit Enter."
 
 # ── Stage 4: Verifizieren ──────────────────────────────────────────────────
 stage "Verifizieren"
