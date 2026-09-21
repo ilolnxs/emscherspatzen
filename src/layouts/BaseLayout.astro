@@ -33,6 +33,7 @@ const { title } = Astro.props;
 		<main>
 			<slot />
 		</main>
+		<slot name="abschluss" />
 		<footer class="site-footer">
 			<picture>
 				<source media="(prefers-reduced-motion: reduce)" srcset="/logo/emscherspatzen-weiss.svg" />
@@ -93,10 +94,10 @@ const { title } = Astro.props;
 
 	main {
 		flex: 1;
+		padding-block-end: 4rem;
 	}
 
 	.site-footer {
-		margin-block-start: 4rem;
 		padding: 2.5rem clamp(1rem, 5vw, 3rem);
 		background: var(--blau-dunkel);
 		color: var(--blau-hell);
