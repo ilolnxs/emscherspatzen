@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Fotos & Videos">
+	<div class="inhalt">
+		<h1>Fotos & Videos</h1>
+
+		<p class="intro">
+			Erst mit Fotos und Videos überträgt sich die Stimmung eines Auftritts – schaut selbst rein.
+		</p>
+
+		<section>
+			<h2>Auf Instagram</h2>
+			<p>
+				Die aktuellsten Eindrücke von unseren Auftritten posten wir auf Instagram.
+			</p>
+			<a
+				class="insta-link"
+				href="https://www.instagram.com/emscherspatzen/"
+				target="_blank"
+				rel="noopener"
+			>
+				@emscherspatzen auf Instagram ansehen
+			</a>
+		</section>
+	</div>
+</BaseLayout>
+
+<style>
+	.inhalt {
+		max-width: 680px;
+		margin: 0 auto;
+		padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 5vw, 3rem);
+	}
+
+	.intro {
+		font-family: var(--font-display);
+		font-size: 1.2rem;
+		font-weight: 500;
+		color: var(--blau-dunkel);
+	}
+
+	section {
+		margin-block-start: 2.5rem;
+		padding-inline-start: 1.25rem;
+		border-inline-start: 3px solid var(--blau-hell);
+	}
+
+	.insta-link {
+		display: inline-block;
+		margin-block-start: 0.75rem;
+		font-weight: 600;
+		color: var(--blau);
+	}
+</style>

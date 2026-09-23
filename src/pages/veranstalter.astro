@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Für Veranstalter">
+	<div class="inhalt">
+		<h1>Für Veranstalter</h1>
+
+		<p class="intro">
+			Ihr überlegt, die Emscherspatzen für einen Auftritt zu buchen? Hier findet ihr in Kürze
+			unsere Anforderungen an Bühne, Technik und Equipment.
+		</p>
+
+		<section>
+			<h2>Details folgen in Kürze</h2>
+			<p>
+				Diese Seite wird gerade befüllt. Für Fragen zu Bühnengröße, Strombedarf oder Auf- und
+				Abbau meldet euch gerne direkt bei uns.
+			</p>
+		</section>
+	</div>
+</BaseLayout>
+
+<style>
+	.inhalt {
+		max-width: 680px;
+		margin: 0 auto;
+		padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 5vw, 3rem);
+	}
+
+	.intro {
+		font-family: var(--font-display);
+		font-size: 1.2rem;
+		font-weight: 500;
+		color: var(--blau-dunkel);
+	}
+
+	section {
+		margin-block-start: 2.5rem;
+		padding-inline-start: 1.25rem;
+		border-inline-start: 3px solid var(--blau-hell);
+	}
+</style>

@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Charity">
+	<div class="inhalt">
+		<h1>Gemeinsam Gutes tun</h1>
+
+		<p class="intro">
+			Wir treten nicht für Geld auf. Unsere Gagen gehen als Spende an gemeinnützige Zwecke – in
+			Kooperation mit running4charity (r4c).
+		</p>
+
+		<section>
+			<h2>Wie es funktioniert</h2>
+			<p>
+				Die vereinbarte Auftrittsgage der Emscherspatzen wird vollständig gespendet. running4charity
+				verstärkt dieses Zeichen der Solidarität, indem der gespendete Betrag aufgerundet oder –
+				nach Absprache – sogar verdoppelt wird. So wächst aus jedem Auftritt ein wertvoller Beitrag
+				für den guten Zweck.
+			</p>
+		</section>
+
+		<section>
+			<h2>Wem es zugutekommt</h2>
+			<p>
+				Alle Spenden kommen Hilfsorganisationen und sozialen Projekten in Oberhausen und Umgebung
+				zugute – ausgewählt gemeinsam mit running4charity. Die Abwicklung erfolgt transparent und
+				ordnungsgemäß; für die gespendete Gage kann eine Spendenbescheinigung ausgestellt werden.
+			</p>
+		</section>
+
+		<section>
+			<h2>Ihr wollt mitmachen?</h2>
+			<p>
+				Firmen und Veranstalter, die uns buchen, unterstützen diese Aktion automatisch – und können
+				eine Spendenbescheinigung erhalten. Sprecht uns einfach an, wenn ihr Teil dieser Kooperation
+				werden wollt.
+			</p>
+		</section>
+	</div>
+</BaseLayout>
+
+<style>
+	.inhalt {
+		max-width: 680px;
+		margin: 0 auto;
+		padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 5vw, 3rem);
+	}
+
+	.intro {
+		font-family: var(--font-display);
+		font-size: 1.2rem;
+		font-weight: 500;
+		color: var(--blau-dunkel);
+	}
+
+	section {
+		margin-block-start: 2.5rem;
+		padding-inline-start: 1.25rem;
+		border-inline-start: 3px solid var(--blau-hell);
+	}
+</style>
