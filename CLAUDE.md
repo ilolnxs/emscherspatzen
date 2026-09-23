@@ -14,7 +14,12 @@ Static Astro site, deployed to Cloudflare Pages (build command `npm run build`, 
 
 ## Deployment
 
-Live: https://emscherspatzen.marvin-grigg.workers.dev/ (Cloudflare, Auto-Deploy bei Push auf main)
+Live: https://emscherspatzen.marvin-grigg.workers.dev/ (Cloudflare, Auto-Deploy bei Push auf main) —
+**wird auf ein Cloudflare Pages Projekt umgezogen** (siehe `docs/adr/0001-content-pipeline.md`,
+Nachtrag), damit `functions/api/auftritte.js` als Pages Function laufen kann. Nach dem Umzug ändert
+sich die URL; `AUFTRITTE_SHEET_CSV_URL` muss im neuen Pages-Projekt als Environment-Variable
+gesetzt werden (Build- und Function-Zugriff), der bestehende Apps-Script-Deploy-Hook im Sheet muss
+auf die neue Deploy-Hook-URL zeigen.
 
 When starting the dev server, use background mode:
 
