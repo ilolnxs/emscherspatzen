@@ -1,0 +1,13 @@
+{
+	// Static Assets weiterhin über `astro build` (./dist). Zusätzlich ein
+	// schlanker eigener Worker (src/worker.ts) für die Live-Auftritte-Route —
+	// kein Astro-Cloudflare-SSR-Adapter, deshalb tritt das Adapter-Doppel-
+	// Build-Problem aus docs/adr/0001-content-pipeline.md hier nicht auf.
+	"name": "emscherspatzen",
+	"compatibility_date": "2026-09-20",
+	"main": "src/worker.ts",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS"
+	}
+}
