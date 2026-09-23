@@ -9,5 +9,14 @@
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS"
+	},
+	// Nicht geheim: dieselbe "Jeder mit Link"-Sheet-URL, die schon als
+	// Build-Variable existiert und deren Inhalt ohnehin öffentlich über
+	// /api/auftritte ausgeliefert wird. Muss hier stehen, nicht nur im
+	// Dashboard, weil `npx wrangler deploy` im CI-Build aus dieser Datei
+	// liest und eine nur im Dashboard gesetzte Runtime-Variable beim
+	// nächsten Git-Deploy sonst verwirft.
+	"vars": {
+		"AUFTRITTE_SHEET_CSV_URL": "https://docs.google.com/spreadsheets/d/1hANtmFERY5xL_EUv-EV599iO7ic3bcSswo5c_HtkGZI/export?format=csv&gid=0"
 	}
 }
