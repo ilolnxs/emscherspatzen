@@ -145,28 +145,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 			};
 		}
 
-		function formatDatumZeit(a: AuftrittRow): string {
-			var p = a.datum.split('-');
-			var datum = p[2] + '.' + p[1] + '.' + p[0];
-			return a.uhrzeit ? datum + ', ' + a.uhrzeit + ' Uhr' : datum;
-		}
-
 		function auftrittHtml(a: AuftrittRow, zeigeBeschreibung: boolean): string {
 			var p = a.datum.split('-');
+			var metaTeile: string[] = [];
+			if (a.uhrzeit) metaTeile.push(escapeHtml(a.uhrzeit) + ' Uhr');
+			if (a.ort) metaTeile.push(escapeHtml(a.ort));
 			return (
 				'<li>' +
-				'<div class="datumsschild"><span class="tag">' +
+				'<div class="datumsschild">' +
+				'<span class="tag">' +
 				p[2] +
-				'</span><span class="monat">' +
+				'</span>' +
+				'<span class="monat">' +
 				MONATE[parseInt(p[1], 10) - 1] +
-				'</span></div>' +
+				'</span>' +
+				'<span class="jahr">' +
+				p[0] +
+				'</span>' +
+				'</div>' +
 				'<div class="auftritt-info"><h3>' +
 				escapeHtml(a.titel) +
 				'</h3>' +
-				'<p class="meta">' +
-				formatDatumZeit(a) +
-				(a.ort ? ' · ' + escapeHtml(a.ort) : '') +
-				'</p>' +
+				(metaTeile.length ? '<p class="meta">' + metaTeile.join(' · ') + '</p>' : '') +
 				(zeigeBeschreibung && a.beschreibung ? '<p class="beschreibung">' + escapeHtml(a.beschreibung) + '</p>' : '') +
 				'</div></li>'
 			);
@@ -250,6 +250,36 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		margin-block-end: 3rem;
 	}
 
+	.hoer-rein {
+		margin-block-end: 0;
+		background: var(--blau-dunkel);
+		color: var(--weiss);
+		padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 5vw, 3rem);
+	}
+
+	.hoer-rein-inhalt {
+		max-width: 720px;
+		margin: 0 auto;
+	}
+
+	.hoer-rein h2 {
+		margin: 0 0 1rem;
+	}
+
+	.hoer-rein iframe {
+		display: block;
+		border-radius: 12px;
+	}
+</style>
+
+<!--
+	Global statt scoped: dieses Markup entsteht zur Laufzeit per innerHTML
+	(siehe <script> oben), nicht beim Astro-Build. Astros Scoped-Styles hängen
+	ein data-astro-cid-Attribut an Elemente, das nur beim Build vergeben wird
+	– client-injiziertes HTML bekommt es nie und würde von scoped CSS nicht
+	getroffen.
+-->
+<style is:global>
 	.auftritte-liste {
 		list-style: none;
 		margin: 0;
@@ -279,26 +309,34 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		width: 3.5rem;
+		width: 3.75rem;
 		font-family: var(--font-display);
 		line-height: 1;
 	}
 
 	.datumsschild .tag {
-		font-size: 1.6rem;
-		font-weight: 700;
+		font-size: 1.75rem;
+		font-weight: 800;
 		color: var(--blau-dunkel);
 	}
 
 	.datumsschild .monat {
-		font-size: 0.75rem;
-		font-weight: 600;
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.05em;
 		color: var(--blau);
-		margin-block-start: 0.25rem;
+		margin-block-start: 0.2rem;
+	}
+
+	.datumsschild .jahr {
+		font-size: 0.65rem;
+		color: #6b7280;
+		margin-block-start: 0.1rem;
 	}
 
 	.vergangen .datumsschild .tag,
-	.vergangen .datumsschild .monat {
+	.vergangen .datumsschild .monat,
+	.vergangen .datumsschild .jahr {
 		color: #6b7280;
 	}
 
@@ -321,26 +359,5 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 	.beschreibung {
 		margin: 0.5rem 0 0;
-	}
-
-	.hoer-rein {
-		margin-block-end: 0;
-		background: var(--blau-dunkel);
-		color: var(--weiss);
-		padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 5vw, 3rem);
-	}
-
-	.hoer-rein-inhalt {
-		max-width: 720px;
-		margin: 0 auto;
-	}
-
-	.hoer-rein h2 {
-		margin: 0 0 1rem;
-	}
-
-	.hoer-rein iframe {
-		display: block;
-		border-radius: 12px;
 	}
 </style>
