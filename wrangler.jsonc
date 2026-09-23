@@ -1,12 +1,13 @@
 {
-	// Reine Static-Assets-Auslieferung, kein Worker-Skript/SSR-Adapter.
-	// Ohne diese Datei versucht `wrangler deploy` beim ersten Lauf automatisch
-	// den @astrojs/cloudflare-SSR-Adapter zu installieren (Images/KV/Sessions-
-	// Bindings) und baut dabei selbst neu – dieser zweite Build hatte keinen
-	// Zugriff auf die Cloudflare-Build-Variablen (siehe docs/adr/0001).
+	// Static Assets weiterhin über `astro build` (./dist). Zusätzlich ein
+	// schlanker eigener Worker (src/worker.ts) für die Live-Auftritte-Route —
+	// kein Astro-Cloudflare-SSR-Adapter, deshalb tritt das Adapter-Doppel-
+	// Build-Problem aus docs/adr/0001-content-pipeline.md hier nicht auf.
 	"name": "emscherspatzen",
 	"compatibility_date": "2026-09-20",
+	"main": "src/worker.ts",
 	"assets": {
-		"directory": "./dist"
+		"directory": "./dist",
+		"binding": "ASSETS"
 	}
 }

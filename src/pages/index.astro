@@ -1,37 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { parseAuftritte, splitByZeitpunkt, formatDatumZeit, type Auftritt } from '../lib/auftritte';
-
-const csvUrl = process.env.AUFTRITTE_SHEET_CSV_URL;
-
-let auftritte: Auftritt[] = [];
-if (!csvUrl) {
-	console.warn('AUFTRITTE_SHEET_CSV_URL ist nicht gesetzt – es werden keine Auftritte angezeigt.');
-} else {
-	try {
-		const response = await fetch(csvUrl);
-		if (!response.ok) {
-			console.warn(`Auftritte-Sheet konnte nicht geladen werden (HTTP ${response.status}).`);
-		} else {
-			auftritte = parseAuftritte(await response.text());
-		}
-	} catch (error) {
-		console.warn(`Auftritte-Sheet konnte nicht geladen werden: ${error}`);
-	}
-}
-
-const { bevorstehende, vergangene } = splitByZeitpunkt(auftritte);
-
-function tag(iso: string): string {
-	return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', timeZone: 'UTC' });
-}
-
-function monat(iso: string): string {
-	return new Date(iso)
-		.toLocaleDateString('de-DE', { month: 'short', timeZone: 'UTC' })
-		.replace('.', '')
-		.toUpperCase();
-}
 ---
 
 <BaseLayout title="Start">
@@ -48,57 +16,12 @@ function monat(iso: string): string {
 	<div class="inhalt">
 		<section>
 			<h2>Bevorstehende Auftritte</h2>
-			{
-				bevorstehende.length === 0 ? (
-					<p>Aktuell sind keine Auftritte geplant.</p>
-				) : (
-					<ul class="auftritte-liste">
-						{bevorstehende.map((a) => (
-							<li>
-								<div class="datumsschild">
-									<span class="tag">{tag(a.datum)}</span>
-									<span class="monat">{monat(a.datum)}</span>
-								</div>
-								<div class="auftritt-info">
-									<h3>{a.titel}</h3>
-									<p class="meta">
-										{formatDatumZeit(a)}
-										{a.ort && <span> · {a.ort}</span>}
-									</p>
-									{a.beschreibung && <p class="beschreibung">{a.beschreibung}</p>}
-								</div>
-							</li>
-						))}
-					</ul>
-				)
-			}
+			<div id="bevorstehende-liste"><p>Aktuell sind keine Auftritte geplant.</p></div>
 		</section>
 
 		<section>
 			<h2>Vergangene Auftritte</h2>
-			{
-				vergangene.length === 0 ? (
-					<p>Noch keine vergangenen Auftritte.</p>
-				) : (
-					<ul class="auftritte-liste vergangen">
-						{vergangene.map((a) => (
-							<li>
-								<div class="datumsschild">
-									<span class="tag">{tag(a.datum)}</span>
-									<span class="monat">{monat(a.datum)}</span>
-								</div>
-								<div class="auftritt-info">
-									<h3>{a.titel}</h3>
-									<p class="meta">
-										{formatDatumZeit(a)}
-										{a.ort && <span> · {a.ort}</span>}
-									</p>
-								</div>
-							</li>
-						))}
-					</ul>
-				)
-			}
+			<div id="vergangene-liste"><p>Noch keine vergangenen Auftritte.</p></div>
 		</section>
 	</div>
 
@@ -117,6 +40,183 @@ function monat(iso: string): string {
 		</div>
 	</section>
 </BaseLayout>
+
+<script>
+	(function () {
+		'use strict';
+		var DATUM_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+		var MONATE = ['JAN', 'FEB', 'MÄR', 'APR', 'MAI', 'JUN', 'JUL', 'AUG', 'SEP', 'OKT', 'NOV', 'DEZ'];
+
+		interface AuftrittRow {
+			datum: string;
+			titel: string;
+			ort: string;
+			uhrzeit: string;
+			beschreibung: string;
+		}
+
+		function escapeHtml(s: unknown): string {
+			var ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+			return String(s).replace(/[&<>"']/g, function (c) {
+				return ESCAPES[c];
+			});
+		}
+
+		// Quote-aware CSV-Split: ein Komma innerhalb von "..." (z.B. im Ort-Feld) darf
+		// die Spalten nicht verschieben.
+		function splitCsvLine(line: string): string[] {
+			var out = [],
+				field = '',
+				inQuotes = false;
+			for (var i = 0; i < line.length; i++) {
+				var c = line[i];
+				if (inQuotes) {
+					if (c === '"') {
+						if (line[i + 1] === '"') {
+							field += '"';
+							i++;
+						} else {
+							inQuotes = false;
+						}
+					} else {
+						field += c;
+					}
+				} else {
+					if (c === '"') inQuotes = true;
+					else if (c === ',') {
+						out.push(field);
+						field = '';
+					} else field += c;
+				}
+			}
+			out.push(field);
+			return out;
+		}
+
+		function parseAuftritte(csv: string): AuftrittRow[] {
+			var lines = csv.split(/\r\n|\n/).filter(function (l) {
+				return l.trim() !== '';
+			});
+			if (!lines.length) return [];
+			var header = splitCsvLine(lines[0]).map(function (h) {
+				return h.trim().toLowerCase();
+			});
+			var idx = {
+				datum: header.indexOf('datum'),
+				titel: header.indexOf('titel'),
+				ort: header.indexOf('ort'),
+				uhrzeit: header.indexOf('uhrzeit'),
+				beschreibung: header.indexOf('beschreibung'),
+			};
+			var out: AuftrittRow[] = [];
+			for (var i = 1; i < lines.length; i++) {
+				var f = splitCsvLine(lines[i]);
+				var datum = (f[idx.datum] || '').trim();
+				var titel = (f[idx.titel] || '').trim();
+				if (!DATUM_PATTERN.test(datum) || !titel) continue; // ungültige/leere Zeile überspringen, nicht abbrechen
+				out.push({
+					datum: datum,
+					titel: titel,
+					ort: idx.ort > -1 ? (f[idx.ort] || '').trim() : '',
+					uhrzeit: idx.uhrzeit > -1 ? (f[idx.uhrzeit] || '').trim() : '',
+					beschreibung: idx.beschreibung > -1 ? (f[idx.beschreibung] || '').trim() : '',
+				});
+			}
+			return out;
+		}
+
+		function splitByZeitpunkt(auftritte: AuftrittRow[]): { bevorstehende: AuftrittRow[]; vergangene: AuftrittRow[] } {
+			var heuteIso = new Date().toISOString().slice(0, 10);
+			return {
+				bevorstehende: auftritte
+					.filter(function (a) {
+						return a.datum >= heuteIso;
+					})
+					.sort(function (a, b) {
+						return a.datum.localeCompare(b.datum);
+					}),
+				vergangene: auftritte
+					.filter(function (a) {
+						return a.datum < heuteIso;
+					})
+					.sort(function (a, b) {
+						return b.datum.localeCompare(a.datum);
+					}),
+			};
+		}
+
+		function formatDatumZeit(a: AuftrittRow): string {
+			var p = a.datum.split('-');
+			var datum = p[2] + '.' + p[1] + '.' + p[0];
+			return a.uhrzeit ? datum + ', ' + a.uhrzeit + ' Uhr' : datum;
+		}
+
+		function auftrittHtml(a: AuftrittRow, zeigeBeschreibung: boolean): string {
+			var p = a.datum.split('-');
+			return (
+				'<li>' +
+				'<div class="datumsschild"><span class="tag">' +
+				p[2] +
+				'</span><span class="monat">' +
+				MONATE[parseInt(p[1], 10) - 1] +
+				'</span></div>' +
+				'<div class="auftritt-info"><h3>' +
+				escapeHtml(a.titel) +
+				'</h3>' +
+				'<p class="meta">' +
+				formatDatumZeit(a) +
+				(a.ort ? ' · ' + escapeHtml(a.ort) : '') +
+				'</p>' +
+				(zeigeBeschreibung && a.beschreibung ? '<p class="beschreibung">' + escapeHtml(a.beschreibung) + '</p>' : '') +
+				'</div></li>'
+			);
+		}
+
+		function renderListe(
+			el: HTMLElement,
+			auftritte: AuftrittRow[],
+			klasse: string,
+			zeigeBeschreibung: boolean,
+			leerText: string
+		): void {
+			if (!auftritte.length) {
+				el.innerHTML = '<p>' + leerText + '</p>';
+				return;
+			}
+			el.innerHTML =
+				'<ul class="auftritte-liste' +
+				(klasse ? ' ' + klasse : '') +
+				'">' +
+				auftritte
+					.map(function (a) {
+						return auftrittHtml(a, zeigeBeschreibung);
+					})
+					.join('') +
+				'</ul>';
+		}
+
+		function ladeAuftritte(): void {
+			const bevorstehendeEl = document.getElementById('bevorstehende-liste');
+			const vergangeneEl = document.getElementById('vergangene-liste');
+			if (!bevorstehendeEl || !vergangeneEl) return;
+			fetch('/api/auftritte')
+				.then(function (res) {
+					if (!res.ok) throw new Error('HTTP ' + res.status);
+					return res.text();
+				})
+				.then(function (csv) {
+					var split = splitByZeitpunkt(parseAuftritte(csv));
+					renderListe(bevorstehendeEl, split.bevorstehende, '', true, 'Aktuell sind keine Auftritte geplant.');
+					renderListe(vergangeneEl, split.vergangene, 'vergangen', false, 'Noch keine vergangenen Auftritte.');
+				})
+				.catch(function (err) {
+					console.warn('Auftritte konnten nicht geladen werden:', err);
+				});
+		}
+
+		ladeAuftritte();
+	})();
+</script>
 
 <style>
 	.hero {

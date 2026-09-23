@@ -10,11 +10,14 @@ Single-context: `CONTEXT.md` + `docs/adr/` at the repo root (created lazily as d
 
 ## Development
 
-Static Astro site, deployed to Cloudflare Pages (build command `npm run build`, output directory `dist`, no adapter needed).
+Static Astro site (build command `npm run build`, output directory `dist`, kein Astro-Cloudflare-Adapter). Deployed als Cloudflare Worker mit Static Assets (`wrangler.jsonc`) plus einem schlanken eigenen Worker-Skript (`src/worker.ts`) für die Live-Route `/api/auftritte`.
 
 ## Deployment
 
-Live: https://emscherspatzen.marvin-grigg.workers.dev/ (Cloudflare, Auto-Deploy bei Push auf main)
+Live: https://emscherspatzen.marvin-grigg.workers.dev/ (Cloudflare, Auto-Deploy bei Push auf main).
+`AUFTRITTE_SHEET_CSV_URL` muss im Workers-Projekt sowohl als Build-Variable (für `astro build`) als
+auch als Laufzeit-Variable (für `src/worker.ts`) gesetzt sein. Details zur Homepage-Live-Route
+siehe `docs/adr/0001-content-pipeline.md`, Nachtrag.
 
 When starting the dev server, use background mode:
 
