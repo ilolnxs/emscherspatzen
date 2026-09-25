@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Über uns">
+	<div class="inhalt">
+		<h1>Über uns</h1>
+
+		<p class="intro">
+			Vom Feierabendbier zum knapp 60-köpfigen Chor: Das ist unsere Geschichte.
+		</p>
+
+		<section>
+			<h2>Wie alles begann</h2>
+			<p>
+				Gegründet wurde der Chor 2019 von einer kleinen Gruppe von Sängern – manchmal reichte es
+				dabei ehrlich gesagt nur zum Bier trinken. Geprobt haben wir von Anfang an in der
+				Bernardus-Kapelle in Oberhausen-Sterkrade, inklusive Essen und Trinken. Das ist bis heute
+				so geblieben.
+			</p>
+		</section>
+
+		<section>
+			<h2>Corona und der Neustart</h2>
+			<p>
+				2020 hat uns Corona fast das Genick gebrochen – der Chor stand am Ende. Ab 2023 ging es
+				mit einem Neustart weiter, damals mit rund 17 Spatzen. Seitdem ist die Zahl der Sänger
+				schnell gewachsen, auf inzwischen knapp 60 (Stand 2026).
+			</p>
+		</section>
+
+		<section>
+			<h2>Unsere Meilensteine</h2>
+			<ul>
+				<li>2023 – OLGAs Rock</li>
+				<li>2024 – FANTASTIVAL Dinslaken</li>
+				<li>2024 – ANLEUCHTEN (erstmalig)</li>
+				<li>2025 – ROCK am See Tender (erstmalig)</li>
+				<li>2026 – 250 Jahre Königshardt, lange Tafel und Umzug</li>
+				<li>2026 – eigener Song „Laut statt perfekt" (auf allen Plattformen)</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Was uns am meisten Freude macht</h2>
+			<p>
+				Am liebsten machen wir Flashmobs – davon gab es inzwischen zahlreiche. Genauso am Herzen
+				liegen uns Auftritte mit sozialem Hintergrund: in Altersheimen, im Friedensdorf und bei
+				Chor-Abenden.
+			</p>
+		</section>
+	</div>
+</BaseLayout>
+
+<style>
+	.inhalt {
+		max-width: 680px;
+		margin: 0 auto;
+		padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 5vw, 3rem);
+	}
+
+	.intro {
+		font-family: var(--font-display);
+		font-size: 1.2rem;
+		font-weight: 500;
+		color: var(--blau-dunkel);
+	}
+
+	section {
+		margin-block-start: 2.5rem;
+		padding-inline-start: 1.25rem;
+		border-inline-start: 3px solid var(--blau-hell);
+	}
+
+	ul {
+		margin: 0;
+		padding-inline-start: 1.25rem;
+	}
+
+	li {
+		margin-block-end: 0.4rem;
+	}
+</style>
