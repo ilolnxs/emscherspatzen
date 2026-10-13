@@ -5,21 +5,25 @@ import auftritt from '../assets/ueber-uns-auftritt.jpg';
 ---
 
 <BaseLayout title="Über uns">
-	<div class="inhalt">
-		<h1>Über uns</h1>
-
-		<p class="intro">
-			Vom Feierabendbier zum knapp 60-köpfigen Chor: Das ist unsere Geschichte.
-		</p>
-
+	<header class="hero">
 		<Image
 			src={auftritt}
 			alt="Die Emscherspatzen bei einem Auftritt in einer Kirche, links und rechts Banner mit dem Spatzen-Logo"
-			class="foto"
-			widths={[480, 680, 1020]}
-			sizes="(min-width: 680px) 680px, 100vw"
+			class="hero-bild"
+			widths={[640, 960, 1280, 1600]}
+			sizes="100vw"
+			loading="eager"
+			fetchpriority="high"
 		/>
+		<div class="hero-inhalt">
+			<h1>Über uns</h1>
+			<p class="intro">
+				Vom Feierabendbier zum knapp 60-köpfigen Chor: Das ist unsere Geschichte.
+			</p>
+		</div>
+	</header>
 
+	<div class="inhalt">
 		<section>
 			<h2>Wie alles begann</h2>
 			<p>
@@ -63,27 +67,53 @@ import auftritt from '../assets/ueber-uns-auftritt.jpg';
 </BaseLayout>
 
 <style>
+	.hero {
+		position: relative;
+		isolation: isolate;
+		display: grid;
+		place-items: center;
+		min-height: clamp(220px, 32vw, 340px);
+		padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 5vw, 3rem);
+		background: var(--blau-dunkel);
+		color: var(--weiss);
+		text-align: center;
+	}
+
+	.hero-bild {
+		position: absolute;
+		inset: 0;
+		z-index: -2;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 82%;
+	}
+
+	.hero::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: linear-gradient(to bottom, rgb(14 38 71 / 0.85), rgb(14 38 71 / 0.6));
+	}
+
+	.hero h1 {
+		margin: 0;
+		color: inherit;
+	}
+
 	.inhalt {
 		max-width: 680px;
 		margin: 0 auto;
-		padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 5vw, 3rem);
+		padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 5vw, 3rem) clamp(2rem, 5vw, 3.5rem);
 	}
 
 	.intro {
+		max-width: 34ch;
+		margin: 0.75rem auto 0;
 		font-family: var(--font-display);
 		font-size: 1.2rem;
 		font-weight: 500;
-		color: var(--blau-dunkel);
-	}
-
-	.foto {
-		display: block;
-		width: 100%;
-		aspect-ratio: 4 / 3;
-		object-fit: cover;
-		object-position: center 85%;
-		margin-block-start: 2rem;
-		border-radius: 4px;
 	}
 
 	section {
