@@ -1,15 +1,28 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import auftritt from '../assets/ueber-uns-auftritt.jpg';
 ---
 
 <BaseLayout title="Über uns">
-	<div class="inhalt">
-		<h1>Über uns</h1>
+	<div class="seite">
+		<Image
+			src={auftritt}
+			alt="Die Emscherspatzen bei einem Auftritt in einer Kirche, links und rechts Banner mit dem Spatzen-Logo"
+			class="seite-bild"
+			widths={[640, 960, 1280, 1600]}
+			sizes="100vw"
+			loading="eager"
+			fetchpriority="high"
+		/>
+		<header class="kopf">
+			<h1>Über uns</h1>
+			<p class="intro">
+				Vom Feierabendbier zum knapp 60-köpfigen Chor: Das ist unsere Geschichte.
+			</p>
+		</header>
 
-		<p class="intro">
-			Vom Feierabendbier zum knapp 60-köpfigen Chor: Das ist unsere Geschichte.
-		</p>
-
+		<div class="inhalt">
 		<section>
 			<h2>Wie alles begann</h2>
 			<p>
@@ -49,27 +62,64 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 				Chor-Abenden.
 			</p>
 		</section>
+		</div>
 	</div>
 </BaseLayout>
 
 <style>
+	.seite {
+		position: relative;
+		isolation: isolate;
+		background: var(--blau-dunkel);
+		color: var(--weiss);
+	}
+
+	.seite-bild {
+		position: absolute;
+		inset: 0;
+		z-index: -2;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 75%;
+	}
+
+	.seite::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: linear-gradient(to bottom, rgb(14 38 71 / 0.85), rgb(14 38 71 / 0.8));
+	}
+
+	.kopf {
+		max-width: 680px;
+		margin: 0 auto;
+		padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 5vw, 3rem) 0;
+		text-align: center;
+	}
+
+	.kopf h1 {
+		margin: 0;
+	}
+
 	.inhalt {
 		max-width: 680px;
 		margin: 0 auto;
-		padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 5vw, 3rem);
+		padding: 0 clamp(1rem, 5vw, 3rem) clamp(2rem, 5vw, 3.5rem);
 	}
 
 	.intro {
+		margin: 0.75rem auto 0;
 		font-family: var(--font-display);
 		font-size: 1.2rem;
 		font-weight: 500;
-		color: var(--blau-dunkel);
 	}
 
 	section {
 		margin-block-start: 2.5rem;
 		padding-inline-start: 1.25rem;
-		border-inline-start: 3px solid var(--blau-hell);
+		border-inline-start: 3px solid var(--blau);
 	}
 
 	ul {
