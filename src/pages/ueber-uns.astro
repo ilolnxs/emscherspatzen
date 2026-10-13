@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import auftritt from '../assets/ueber-uns-auftritt.jpg';
 ---
 
 <BaseLayout title="Über uns">
@@ -9,6 +11,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		<p class="intro">
 			Vom Feierabendbier zum knapp 60-köpfigen Chor: Das ist unsere Geschichte.
 		</p>
+
+		<Image
+			src={auftritt}
+			alt="Die Emscherspatzen bei einem Auftritt in einer Kirche, links und rechts Banner mit dem Spatzen-Logo"
+			class="foto"
+			widths={[480, 680, 1020]}
+			sizes="(min-width: 680px) 680px, 100vw"
+		/>
 
 		<section>
 			<h2>Wie alles begann</h2>
@@ -64,6 +74,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		font-size: 1.2rem;
 		font-weight: 500;
 		color: var(--blau-dunkel);
+	}
+
+	.foto {
+		display: block;
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		object-position: center 85%;
+		margin-block-start: 2rem;
+		border-radius: 4px;
 	}
 
 	section {
