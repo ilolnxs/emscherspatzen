@@ -6,6 +6,9 @@
 	"name": "emscherspatzen",
 	"compatibility_date": "2026-09-20",
 	"main": "src/worker.ts",
+	// Custom Domain: Cloudflare legt DNS-Eintrag und Zertifikat selbst an.
+	// Auf emscherspatzen.de darf kein manueller CNAME/A-Eintrag existieren.
+	"routes": [{ "pattern": "emscherspatzen.de", "custom_domain": true }],
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS"
