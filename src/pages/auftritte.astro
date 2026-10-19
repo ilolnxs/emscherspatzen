@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Auftritte from '../components/Auftritte.astro';
+---
+
+<BaseLayout title="Auftritte">
+	<div class="inhalt">
+		<h1>Auftritte</h1>
+		<Auftritte vergangene />
+	</div>
+</BaseLayout>
+
+<style>
+	.inhalt {
+		max-width: 720px;
+		margin: 0 auto;
+		padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 5vw, 3rem);
+	}
+</style>

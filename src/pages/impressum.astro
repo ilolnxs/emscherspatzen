@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Impressum">
+	<div class="inhalt">
+		<h1>Impressum</h1>
+
+		<h2>Angaben gemäß § 5 DDG</h2>
+		<p>
+			Emscherspatzen Männerchor<br />
+			vertreten durch den Chorsprecher:<br />
+			Norbert Dosiehn<br />
+			Waldhuckstraße 143<br />
+			46147 Oberhausen
+		</p>
+		<p>
+			Telefon: <a href="tel:+4915122663350">0151 22 66 33 50</a><br />
+			E-Mail: <a href="mailto:kontakt@emscherspatzen.de">kontakt@emscherspatzen.de</a>
+		</p>
+
+		<h2>Inhaltlich verantwortlich</h2>
+		<p>Norbert Dosiehn (Anschrift wie oben)</p>
+	</div>
+</BaseLayout>
+
+<style>
+	.inhalt {
+		max-width: 680px;
+		margin: 0 auto;
+		padding: clamp(2rem, 5vw, 3.5rem) clamp(1rem, 5vw, 3rem);
+	}
+</style>
