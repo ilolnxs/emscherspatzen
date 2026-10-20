@@ -7,15 +7,48 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		<h1>Für Veranstalter</h1>
 
 		<p class="intro">
-			Ihr überlegt, die Emscherspatzen für einen Auftritt zu buchen? Hier findet ihr in Kürze
-			unsere Anforderungen an Bühne, Technik und Equipment.
+			Ihr überlegt, mit den Emscherspatzen einen Auftritt zu gestalten? Das sind die Anforderungen
+			für eine gelungene Performance.
 		</p>
 
 		<section>
-			<h2>Details folgen in Kürze</h2>
+			<h2>Planung und Rahmen</h2>
+			<ul>
+				<li>
+					Termin und Uhrzeit des Auftritts müssen frühzeitig geklärt sein – wir sind ca. 60
+					Freizeitsänger:innen, hier ist Planung erforderlich.
+				</li>
+				<li>Findet der Auftritt drinnen oder draußen statt?</li>
+				<li>Ist eine Bühne vorhanden? (Größe und Belastbarkeit für mindestens 30 Personen)</li>
+				<li>Ist eine Überdachung vorhanden?</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Technik</h2>
+			<p>Welche Technik ist für die Veranstaltung geplant? Wir benötigen:</p>
+			<ul>
+				<li>
+					Mikrofone für die Chorabnahme (üblicherweise Kondensatormikrofone mit Phantomspeisung)
+				</li>
+				<li>Mikrofone für Ansagen mit Stativ (2 Stück wären gut, gerne Funk)</li>
+				<li>Mikrofon für die Verstärkung eines Cajon</li>
+				<li>Klinkeneingang für eine verstärkte Akustikgitarre</li>
+				<li>Mischpult mit Phantomstrom und der erforderlichen Anzahl an Mikrofoneingängen</li>
+				<li>Monitorboxen</li>
+			</ul>
+		</section>
+
+		<section>
+			<h2>Soundtechnik und eigenes Equipment</h2>
 			<p>
-				Diese Seite wird gerade befüllt. Für Fragen zu Bühnengröße, Strombedarf oder Auf- und
-				Abbau meldet euch gerne direkt bei uns.
+				Wenn ein:e Soundtechniker:in mit der Durchführung beauftragt ist, stimmen wir gerne die
+				Details direkt mit ihm:ihr ab. Dafür benötigen wir die entsprechenden Kontaktdaten.
+			</p>
+			<p>
+				Wenn es nicht möglich ist, die Voraussetzungen ganz oder teilweise zu erfüllen, können wir
+				auch eigenes Equipment mitbringen, um die Veranstaltung gut auszustatten und einen
+				möglichst guten Rahmen für den Auftritt zu schaffen.
 			</p>
 		</section>
 	</div>
@@ -39,5 +72,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		margin-block-start: 2.5rem;
 		padding-inline-start: 1.25rem;
 		border-inline-start: 3px solid var(--blau-hell);
+	}
+
+	ul {
+		margin: 0;
+		padding-inline-start: 1.25rem;
+	}
+
+	li {
+		margin-block-end: 0.4rem;
 	}
 </style>
