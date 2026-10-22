@@ -11,7 +11,7 @@ import Auftritte from '../components/Auftritte.astro';
 			src={titelbild}
 			alt="Die Emscherspatzen in Collegejacken auf der Bühne vor jubelndem Publikum"
 			class="hero-bild"
-			widths={[640, 960, 1280, 1600, 2000, 2400]}
+			widths={[640, 960, 1280, 1600, 2000, 2400, 3200]}
 			sizes="100vw"
 			loading="eager"
 			fetchpriority="high"
@@ -114,6 +114,30 @@ import Auftritte from '../components/Auftritte.astro';
 			rgb(14 38 71 / 0.5) 60%,
 			rgb(14 38 71 / 0.4)
 		);
+	}
+
+	/* Hochformat: Foto in voller Breite (ganzer Chor), Logo und Tagline darunter statt darüber. */
+	@media (max-width: 700px) {
+		.hero {
+			display: block;
+			min-height: 0;
+			padding: 0;
+		}
+
+		.hero-bild {
+			position: static;
+			display: block;
+			height: auto;
+			object-fit: initial;
+		}
+
+		.hero::after {
+			display: none;
+		}
+
+		.hero-inhalt {
+			padding: 1.5rem clamp(1rem, 5vw, 3rem) 2.5rem;
+		}
 	}
 
 	.ticker {
