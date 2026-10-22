@@ -33,13 +33,6 @@ import Auftritte from '../components/Auftritte.astro';
 	<script>
 		import { parseAuftritte, splitByZeitpunkt, formatDatumZeit, type Auftritt } from '../lib/auftritte';
 
-		// Konzept: Demo-Daten per ?ticker-demo, solange im Sheet keine kommenden Auftritte stehen.
-		const DEMO: Auftritt[] = [
-			{ slug: 'a', datum: '2026-11-14', uhrzeit: '19:30', titel: 'Herbstkonzert', ort: 'Herne', beschreibung: '' },
-			{ slug: 'b', datum: '2026-12-05', uhrzeit: '18:00', titel: 'Weihnachtsmarkt', ort: 'Gelsenkirchen', beschreibung: '' },
-			{ slug: 'c', datum: '2027-01-23', uhrzeit: '20:00', titel: 'Neujahrsempfang', ort: 'Bochum', beschreibung: '' },
-		];
-
 		const ticker = document.getElementById('ticker')!;
 		const spur = document.getElementById('ticker-spur')!;
 
@@ -62,7 +55,7 @@ import Auftritte from '../components/Auftritte.astro';
 			.catch(() => '')
 			.then((csv) => {
 				const kommende = splitByZeitpunkt(parseAuftritte(csv)).bevorstehende.slice(0, 3);
-				zeige(kommende.length || !location.search.includes('ticker-demo') ? kommende : DEMO);
+				zeige(kommende);
 			});
 	</script>
 
