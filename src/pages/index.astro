@@ -116,30 +116,6 @@ import Auftritte from '../components/Auftritte.astro';
 		);
 	}
 
-	/* Hochformat: Foto in voller Breite (ganzer Chor), Logo und Tagline darunter statt darüber. */
-	@media (max-width: 700px) {
-		.hero {
-			display: block;
-			min-height: 0;
-			padding: 0;
-		}
-
-		.hero-bild {
-			position: static;
-			display: block;
-			height: auto;
-			object-fit: initial;
-		}
-
-		.hero::after {
-			display: none;
-		}
-
-		.hero-inhalt {
-			padding: 1.5rem clamp(1rem, 5vw, 3rem) 2.5rem;
-		}
-	}
-
 	.ticker {
 		position: absolute;
 		inset: 0 0 auto 0;
