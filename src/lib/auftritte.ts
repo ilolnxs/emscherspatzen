@@ -12,7 +12,7 @@ export interface Auftritt {
 const DATUM_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const UHRZEIT_PATTERN = /^\d{2}:\d{2}$/;
 
-function slugify(text: string): string {
+export function slugify(text: string): string {
 	return text
 		.toLowerCase()
 		.replace(/ä/g, 'ae')

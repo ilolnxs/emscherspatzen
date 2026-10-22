@@ -22,6 +22,8 @@ const { limit, vergangene = false } = Astro.props;
 }
 
 <script>
+	import { slugify } from '../lib/auftritte';
+
 	(function () {
 		'use strict';
 		var DATUM_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
@@ -148,6 +150,11 @@ const { limit, vergangene = false } = Astro.props;
 				'</h3>' +
 				(metaTeile.length ? '<p class="meta">' + metaTeile.join(' · ') + '</p>' : '') +
 				(zeigeBeschreibung && a.beschreibung ? '<p class="beschreibung">' + escapeHtml(a.beschreibung) + '</p>' : '') +
+				(zeigeBeschreibung
+					? '<p class="kalender"><a href="/api/termin.ics?id=' +
+						encodeURIComponent(a.datum + '-' + slugify(a.titel)) +
+						'">In Kalender eintragen</a></p>'
+					: '') +
 				'</div></li>'
 			);
 		}
@@ -298,5 +305,10 @@ const { limit, vergangene = false } = Astro.props;
 
 	.beschreibung {
 		margin: 0.5rem 0 0;
+	}
+
+	.kalender {
+		margin: 0.5rem 0 0;
+		font-size: 0.9375rem;
 	}
 </style>
