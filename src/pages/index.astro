@@ -16,6 +16,9 @@ import Auftritte from '../components/Auftritte.astro';
 			loading="eager"
 			fetchpriority="high"
 		/>
+		<div class="ticker" id="ticker" hidden aria-label="Nächste Auftritte">
+			<div class="ticker-spur" id="ticker-spur"></div>
+		</div>
 		<div class="hero-inhalt">
 		<picture>
 			<source media="(prefers-reduced-motion: reduce)" srcset="/logo/emscherspatzen-weiss.svg" />
@@ -26,6 +29,42 @@ import Auftritte from '../components/Auftritte.astro';
 		</p>
 		</div>
 	</section>
+
+	<script>
+		import { parseAuftritte, splitByZeitpunkt, formatDatumZeit, type Auftritt } from '../lib/auftritte';
+
+		// Konzept: Demo-Daten per ?ticker-demo, solange im Sheet keine kommenden Auftritte stehen.
+		const DEMO: Auftritt[] = [
+			{ slug: 'a', datum: '2026-11-14', uhrzeit: '19:30', titel: 'Herbstkonzert', ort: 'Herne', beschreibung: '' },
+			{ slug: 'b', datum: '2026-12-05', uhrzeit: '18:00', titel: 'Weihnachtsmarkt', ort: 'Gelsenkirchen', beschreibung: '' },
+			{ slug: 'c', datum: '2027-01-23', uhrzeit: '20:00', titel: 'Neujahrsempfang', ort: 'Bochum', beschreibung: '' },
+		];
+
+		const ticker = document.getElementById('ticker')!;
+		const spur = document.getElementById('ticker-spur')!;
+
+		function zeige(auftritte: Auftritt[]) {
+			if (!auftritte.length) return;
+			const html = auftritte
+				.map((a) => `<span class="ticker-eintrag"><b>${formatDatumZeit(a)}</b> ${esc(a.titel)}${a.ort ? ' · ' + esc(a.ort) : ''}</span>`)
+				.join('');
+			// Zweimal, damit die Endlosschleife (translateX -50%) nahtlos läuft.
+			spur.innerHTML = html + html;
+			ticker.hidden = false;
+		}
+
+		function esc(s: string) {
+			return s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+		}
+
+		fetch('/api/auftritte')
+			.then((r) => (r.ok ? r.text() : ''))
+			.catch(() => '')
+			.then((csv) => {
+				const kommende = splitByZeitpunkt(parseAuftritte(csv)).bevorstehende.slice(0, 3);
+				zeige(kommende.length || !location.search.includes('ticker-demo') ? kommende : DEMO);
+			});
+	</script>
 
 	<div class="inhalt">
 		<Auftritte limit={3} />
@@ -82,6 +121,52 @@ import Auftritte from '../components/Auftritte.astro';
 			rgb(14 38 71 / 0.5) 60%,
 			rgb(14 38 71 / 0.4)
 		);
+	}
+
+	.ticker {
+		position: absolute;
+		inset: 0 0 auto 0;
+		overflow: hidden;
+		background: rgb(14 38 71 / 0.85);
+		border-block-end: 1px solid rgb(255 255 255 / 0.2);
+		font-family: var(--font-display);
+		font-size: 0.95rem;
+		white-space: nowrap;
+	}
+
+	.ticker-spur {
+		display: flex;
+		width: max-content;
+		animation: ticker-lauf 30s linear infinite;
+	}
+
+	.ticker:hover .ticker-spur {
+		animation-play-state: paused;
+	}
+
+	.ticker-spur :global(.ticker-eintrag) {
+		padding: 0.6rem 2.5rem;
+	}
+
+	.ticker-spur :global(.ticker-eintrag)::before {
+		content: '♪';
+		margin-inline-end: 0.75rem;
+		opacity: 0.6;
+	}
+
+	@keyframes ticker-lauf {
+		to {
+			transform: translateX(-50%);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.ticker-spur {
+			animation: none;
+		}
+		.ticker {
+			overflow-x: auto;
+		}
 	}
 
 	.hero-logo {
