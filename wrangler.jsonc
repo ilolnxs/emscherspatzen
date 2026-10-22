@@ -8,6 +8,10 @@
 	// Fest gesetzt, sonst setzt jeder Deploy die Preview-URLs auf den Default zurück
 	// und PR-Previews sind nach kurzer Zeit wieder 404.
 	"preview_urls": true,
+	// Im Dashboard aktiviert; hier festhalten, damit ein Deploy es nicht zurücksetzt.
+	"observability": {
+		"enabled": true
+	},
 	"main": "src/worker.ts",
 	// Custom Domain: Cloudflare legt DNS-Eintrag und Zertifikat selbst an.
 	// Auf emscherspatzen.de darf kein manueller CNAME/A-Eintrag existieren.
